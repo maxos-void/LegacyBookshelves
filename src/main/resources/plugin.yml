@@ -4,3 +4,10 @@ main: com.github.maxos.legacyBookshelves.LegacyBookshelves
 api-version: '1.18'
 prefix: LegacyBookshelves
 website: t.me/official_maxos
+
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.3.0
+  - org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3
+  - org.jetbrains.exposed:exposed-core:1.1.1
+  - org.jetbrains.exposed:exposed-jdbc:1.1.1
+  - com.h2database:h2:2.4.240

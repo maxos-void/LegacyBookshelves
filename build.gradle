@@ -1,6 +1,9 @@
 plugins {
     id 'java'
     id("xyz.jpenilla.run-paper") version "2.3.1"
+
+    id 'org.jetbrains.kotlin.jvm'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '2.3.0'
 }
 
 group = 'com.github.maxos'
@@ -14,10 +17,17 @@ repositories {
     }
 }
 
+
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    compileOnly 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    compileOnly 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3'
+    compileOnly libs.exposed.core
+    compileOnly libs.exposed.jdbc
+    compileOnly libs.h2
 }
 
 tasks {
@@ -32,8 +42,6 @@ tasks {
 def targetJavaVersion = 17
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
     if (JavaVersion.current() < javaVersion) {
         toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
@@ -56,13 +64,6 @@ processResources {
     }
 }
 
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src/main/java']
-        }
-        kotlin {
-            srcDirs = ['src/main/kotlin']
-        }
-    }
+kotlin {
+    jvmToolchain(17)
 }
