@@ -1,0 +1,6 @@
+name: LegacyBookshelves
+version: '1.0.0'
+main: com.github.maxos.legacyBookshelves.LegacyBookshelves
+api-version: '1.18'
+prefix: LegacyBookshelves
+website: t.me/official_maxos

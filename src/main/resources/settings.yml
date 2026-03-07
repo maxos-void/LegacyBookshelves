@@ -1,0 +1,12 @@
+prefix: "&7[&6L&bB&7]"
+
+messages:
+
+
+parameters:
+  can-put-simple: true
+  can-stack: true
+  frequency-save-db: 10 # в секундах
+
+  inventory-title: "&0▶ КНИЖНАЯ ПОЛКА"
+  inventory-size: 36
