@@ -8,6 +8,8 @@ import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class MessagesConfig extends Config {
 
@@ -25,16 +27,25 @@ public class MessagesConfig extends Config {
         ConfigurationSection msgSection = getSection(MAIN_SECTION);
         if (msgSection == null) return;
 
-        // TODO(Дописать парсинг сообщений)
+        String prefix = msgSection.getString("prefix");
+        HashMap<String, String> msgMap = new HashMap<>();
+
+        Set<String> keys = msgSection.getKeys(false);
+        keys.forEach(key ->
+                msgMap.put(key, Colorizer.colorize(msgSection.getString(key)))
+        );
+
+        msgData = new MessagesData(msgMap, prefix);
 
     }
 
     @Override
     protected void setDefaultValues() {
+        Map<String, String> defaultMap = Map.of(
+                "reload", Colorizer.colorize("&aПлагин успешно перезагружен &e[{time} ms]")
+        );
         msgData = new MessagesData(
-                new HashMap<>(
-
-                ), Colorizer.colorize("&7[&6L&bB&7]")
+                defaultMap, Colorizer.colorize("&7[&6L&bB&7]")
         );
     }
 
