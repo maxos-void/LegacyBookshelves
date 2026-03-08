@@ -5,6 +5,19 @@ api-version: '1.18'
 prefix: LegacyBookshelves
 website: t.me/official_maxos
 
+commands:
+  legacybookshelves:
+    aliases:
+      - lbs
+      - bookshelves
+    permission: legacybookshelves.use
+    usage: "Использование: ???"
+
+permissions:
+  legacybookshelves.use:
+    default: op
+
+
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.3.0
   - org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3
