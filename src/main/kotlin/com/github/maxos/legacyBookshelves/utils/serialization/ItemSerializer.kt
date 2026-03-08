@@ -8,7 +8,7 @@ import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.util.Base64
 
-object Base64Utils {
+object ItemSerializer {
 
 	fun toItemBase64(item: ItemStack): String {
 		ByteArrayOutputStream().use { outputStream ->

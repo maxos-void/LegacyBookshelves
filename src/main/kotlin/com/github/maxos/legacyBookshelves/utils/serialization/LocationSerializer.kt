@@ -36,7 +36,7 @@ object LocationSerializer {
 		val world = Bukkit.getWorld(worldName)
 		if (world == null) FastLog.sendLog(
 			LogType.ERR,
-			"Мир $worldName не обнаружен для расстановки слипперов!"
+			"Мир $worldName не обнаружен для загрузки книжной полки!"
 		)
 		return world
 	}
@@ -45,7 +45,7 @@ object LocationSerializer {
 		val double = num.toDoubleOrNull()
 		if (double == null) FastLog.sendLog(
 			LogType.ERR,
-			"Ошибка координат, труп пропущен"
+			"Ошибка координат, книжная полка пропущена"
 		)
 		return double
 	}
@@ -54,7 +54,7 @@ object LocationSerializer {
 		val float = num.toFloatOrNull()
 		if (float == null) FastLog.sendLog(
 			LogType.ERR,
-			"Ошибка координат, труп пропущен"
+			"Ошибка координат, книжная полка пропущена"
 		)
 		return float
 	}
