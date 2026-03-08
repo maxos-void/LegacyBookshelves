@@ -1,6 +1,6 @@
-prefix: "&7[&6L&bB&7]"
-
 messages:
+  prefix: "&7[&6L&bB&7]"
+  reload: "&aПлагин успешно перезагружен &e[{time} ms]"
 
 
 parameters:
