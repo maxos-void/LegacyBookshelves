@@ -27,7 +27,7 @@ public abstract class Config {
         if (section == null) {
             sendLog(
                     ERR,
-                    "Не удалось получить секцию " + sectionKey + "в конфигурционном файле! (null)"
+                    "Не удалось получить секцию " + sectionKey + " в конфигурционном файле! (null)"
             );
             // устанавливаем по дефолту
             setDefaultValues();
@@ -35,7 +35,7 @@ public abstract class Config {
         return section;
     }
 
-    protected final void reload() {
+    public final void reload() {
         file.reloadConfig();
         config = file.getConfig();
         parseConfig();
