@@ -53,4 +53,5 @@ class DataBaseConnector(
 		}
 		FastLog.sendLog(LogType.INFO, "§aБаза данных подключена успешно!")
 	}
+
 }
