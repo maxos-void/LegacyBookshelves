@@ -4,9 +4,15 @@ messages:
 
 
 parameters:
-  can-put-simple: true
-  can-stack: true
   frequency-save-db: 10 # в секундах
 
-  inventory-title: "&0▶ КНИЖНАЯ ПОЛКА"
-  inventory-size: 36
+blocks:
+  BOOKSHELF:
+    max-stack-size: 1
+    inventory-title: "&0▶ КНИЖНАЯ ПОЛКА"
+    inventory-size: 36
+    allowed-items:
+      - BOOK
+      - WRITABLE_BOOK
+      - WRITTEN_BOOK
+      - ENCHANTED_BOOK
