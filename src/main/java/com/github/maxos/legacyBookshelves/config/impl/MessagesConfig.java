@@ -20,6 +20,8 @@ public class MessagesConfig extends Config {
     }
 
     @Getter
+    private String prefix;
+    @Getter
     private MessagesData msgData;
 
     @Override
@@ -28,24 +30,21 @@ public class MessagesConfig extends Config {
         if (msgSection == null) return;
 
         String prefix = msgSection.getString("prefix");
-        HashMap<String, String> msgMap = new HashMap<>();
+        this.prefix = prefix != null
+                ? prefix
+                : Colorizer.colorize("&7[&6L&bB&7]");
 
-        Set<String> keys = msgSection.getKeys(false);
-        keys.forEach(key ->
-                msgMap.put(key, Colorizer.colorize(msgSection.getString(key)))
+
+        msgData = new MessagesData(
+                Colorizer.colorize(msgSection.getString("reload"))
         );
-
-        msgData = new MessagesData(msgMap, prefix);
 
     }
 
     @Override
     protected void setDefaultValues() {
-        Map<String, String> defaultMap = Map.of(
-                "reload", Colorizer.colorize("&aПлагин успешно перезагружен &e[{time} ms]")
-        );
         msgData = new MessagesData(
-                defaultMap, Colorizer.colorize("&7[&6L&bB&7]")
+                Colorizer.colorize("&aПлагин успешно перезагружен &e[{time} ms]")
         );
     }
 
