@@ -30,12 +30,7 @@ public class LbsCommand implements CommandExecutor {
         String sub = args[0];
         switch (sub) {
             case "reload" -> {
-                Long timeReload = plugin.reload();
-                sender.sendMessage(
-                        msgConfig.getMsgData().getMsg("reload")
-                                .replace("{time}", timeReload.toString()
-                                )
-                );
+                plugin.reload(sender);
                 return true;
             }
         }  // не хейтите за свитч из одного кейса!!! это на будущее!!!

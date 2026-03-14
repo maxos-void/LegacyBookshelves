@@ -45,7 +45,6 @@ public class ParamConfig extends Config {
         paramData = new ParamData(
                 frequencySaveDb
         );
-
     }
 
     @Override

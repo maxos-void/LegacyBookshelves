@@ -26,7 +26,7 @@ class DataBaseManager(
 						this[ShelfTable.items] = shelf.items
 					}
 				}
-				sendLog(LogType.INFO, "Сохранили все полки! [$saveTime ms]")
+				//!sendLog(LogType.INFO, "Сохранили данные в БД! [$saveTime ms]")
 			}
 		} catch (e: Exception) {
 			sendLog(LogType.ERR, e.message)

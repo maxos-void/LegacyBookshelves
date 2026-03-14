@@ -7,12 +7,12 @@ parameters:
   frequency-save-db: 10 # в секундах
 
 blocks:
-  BOOKSHELF:
-    max-stack-size: 1
-    inventory-title: "&0▶ КНИЖНАЯ ПОЛКА"
-    inventory-size: 36
-    allowed-items:
-      - BOOK
+  BOOKSHELF: # материал блока, по которому при клике откроется настроенный инвентарь (ниже)
+    max-stack-size: 1 # максимальный размер стака в этом инвентаре
+    inventory-title: "&0▶ КНИЖНАЯ ПОЛКА" # тайтл инвентаря
+    inventory-size: 36 # размер инвентаря
+    allowed-items: # какие предметы разрешено класть в этот инвентарь
+      - BOOK # материал!!!
       - WRITABLE_BOOK
       - WRITTEN_BOOK
       - ENCHANTED_BOOK

@@ -21,25 +21,36 @@ public class BlocksConfig extends Config {
     private static final String MAX_STACK_SIZE_KEY = "max-stack-size";
 
     // дефолтные значения
-    private static final String INVENTORY_TITLE_DEFAULT_VALUE = Colorizer.colorize("&0▶ КНИЖНАЯ ПОЛКА");
+    private static final String INVENTORY_TITLE_DEFAULT_VALUE = Colorizer.colorize("&0▶ КНИЖНАЯ ПОЛКА (NULL)");
     private static final int INVENTORY_SIZE_DEFAULT_VALUE = 36;
     private static final int MAX_STACK_DEFAULT_VALUE = 64;
+
 
     public BlocksConfig(FileManager file) {
         super(file);
     }
 
+    //private Map<Material, EnumSet<ChangeType>> changeStatus = new EnumMap<>(Material.class);
     private Map<Material, BlockData> usableBlocks;
+    //private boolean initCompleted = false;
+
     public BlockData getBlockData(Material material) {
         return usableBlocks.get(material);
     }
+
+    public boolean isUsableBlock(Material blockMaterial) {
+        return usableBlocks.containsKey(blockMaterial);
+    }
+
 
     @Override
     protected void parseConfig() {
         ConfigurationSection blocksSection = getSection(MAIN_SECTION);
         if (blocksSection == null) return;
 
-        HashMap<Material, BlockData> usableBlocks = new HashMap<>();
+        //HashMap<Material, BlockData> usableBlocks = new HashMap<>();
+
+        usableBlocks = new EnumMap<>(Material.class);
 
         Set<String> blocksId = blocksSection.getKeys(false);
         for (String blockId : blocksId) {
@@ -52,13 +63,38 @@ public class BlocksConfig extends Config {
 
             BlockData blockData = parseBlockData(blockSection);
 
+            //if (initCompleted) compareData(blockData, blockMaterial);
+
             usableBlocks.put(blockMaterial, blockData);
 
         }
 
-        this.usableBlocks = usableBlocks;
+        //initCompleted = true;
+
+        //this.usableBlocks = usableBlocks;
 
     }
+
+    /*
+    private void compareData(BlockData newData, Material blockMaterial) {
+        BlockData oldData = usableBlocks.get(blockMaterial);
+        if (oldData != null) {
+
+            boolean isTitleChange = !Objects.equals(newData.inventoryTitle(), oldData.inventoryTitle());
+            boolean isSizeChange = newData.inventorySize() != oldData.inventorySize();
+            boolean isMaxStackChange = newData.maxStackSize() != oldData.maxStackSize();
+
+            EnumSet<ChangeType> changes = EnumSet.noneOf(ChangeType.class);
+
+            if (isTitleChange) changes.add(ChangeType.TITLE);
+            if (isSizeChange) changes.add(ChangeType.SIZE);
+            if (isMaxStackChange) changes.add(ChangeType.MAX_STACK);
+
+            changeStatus.put(blockMaterial, changes);
+        }
+
+    }
+     */
 
     private BlockData parseBlockData(ConfigurationSection blockSection) {
 
@@ -101,7 +137,7 @@ public class BlocksConfig extends Config {
         BlockData defaultBlockData = new BlockData(
                 MAX_STACK_DEFAULT_VALUE,
                 INVENTORY_SIZE_DEFAULT_VALUE,
-                INVENTORY_TITLE_DEFAULT_VALUE,
+                Colorizer.colorize(INVENTORY_TITLE_DEFAULT_VALUE),
                 Set.of(Material.BOOK)
         );
         usableBlocks = Map.of(Material.BOOKSHELF, defaultBlockData);

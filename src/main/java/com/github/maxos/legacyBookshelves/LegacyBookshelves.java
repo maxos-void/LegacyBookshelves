@@ -2,19 +2,22 @@ package com.github.maxos.legacyBookshelves;
 
 import com.github.maxos.legacyBookshelves.command.LbsCommand;
 import com.github.maxos.legacyBookshelves.command.LbsTabCompleter;
+import com.github.maxos.legacyBookshelves.config.impl.BlocksConfig;
 import com.github.maxos.legacyBookshelves.config.impl.MessagesConfig;
 import com.github.maxos.legacyBookshelves.config.impl.ParamConfig;
 import com.github.maxos.legacyBookshelves.database.DataBaseConnector;
 import com.github.maxos.legacyBookshelves.database.DataBaseLoader;
 import com.github.maxos.legacyBookshelves.database.DataBaseManager;
 import com.github.maxos.legacyBookshelves.file.FileManager;
-import com.github.maxos.legacyBookshelves.listeners.BookshelvesClickListener;
+import com.github.maxos.legacyBookshelves.listeners.BlockBreakListener;
+import com.github.maxos.legacyBookshelves.listeners.BlockClickListener;
+import com.github.maxos.legacyBookshelves.listeners.InventoryClickListener;
+import com.github.maxos.legacyBookshelves.listeners.PistonListener;
 import com.github.maxos.legacyBookshelves.scheduler.Scheduler;
 import com.github.maxos.legacyBookshelves.shelf.AutoSaver;
 import com.github.maxos.legacyBookshelves.shelf.ShelfManager;
-import com.github.maxos.legacyBookshelves.utils.log.FastLog;
-import com.github.maxos.legacyBookshelves.utils.log.LogType;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,6 +29,8 @@ public final class LegacyBookshelves extends JavaPlugin {
 
     private final Scheduler scheduler = Scheduler.INSTANCE;
 
+    private PluginManager pluginManager;
+
     private DataBaseConnector dbConnector;
     private DataBaseManager dbManager;
     private DataBaseLoader dbLoader;
@@ -33,18 +38,25 @@ public final class LegacyBookshelves extends JavaPlugin {
     private FileManager settingsFile;
     private ParamConfig paramConfig;
     private MessagesConfig msgConfig;
+    private BlocksConfig blocksConfig;
 
     private ShelfManager shelfManager;
 
-    private BookshelvesClickListener bookshelvesClickListener;
+    private BlockClickListener blockClickListener;
+    private InventoryClickListener inventoryClickListener;
+    private BlockBreakListener blockBreakListener;
+    private PistonListener pistonListener;
 
     private AutoSaver saver;
 
     private LbsCommand executor;
     private LbsTabCompleter tabCompleter;
 
+
     @Override
     public void onEnable() {
+
+        pluginManager = Bukkit.getPluginManager();
 
         scheduler.initialization(this);
 
@@ -54,8 +66,9 @@ public final class LegacyBookshelves extends JavaPlugin {
         settingsFile = new FileManager(this, CONFIG_FILE_NAME);
         paramConfig = new ParamConfig(settingsFile);
         msgConfig = new MessagesConfig(settingsFile);
+        blocksConfig = new BlocksConfig(settingsFile);
 
-        shelfManager = new ShelfManager(paramConfig);
+        shelfManager = new ShelfManager(blocksConfig);
         dbLoader = new DataBaseLoader(shelfManager, dbManager);
         dbLoader.loadData();
 
@@ -66,6 +79,7 @@ public final class LegacyBookshelves extends JavaPlugin {
         registerCommand();
 
         saveResource("help.txt", false);
+
     }
 
     @Override
@@ -75,11 +89,16 @@ public final class LegacyBookshelves extends JavaPlugin {
     }
 
     private void registerListeners() {
-        PluginManager manager = Bukkit.getPluginManager();
 
-        bookshelvesClickListener = new BookshelvesClickListener(shelfManager);
+        blockClickListener = new BlockClickListener(shelfManager, blocksConfig);
+        blockBreakListener = new BlockBreakListener(shelfManager, blocksConfig);
+        inventoryClickListener = new InventoryClickListener(/*blocksConfig*/);
+        pistonListener = new PistonListener(shelfManager, blocksConfig);
 
-        manager.registerEvents(bookshelvesClickListener, this);
+        pluginManager.registerEvents(blockClickListener, this);
+        pluginManager.registerEvents(blockBreakListener, this);
+        pluginManager.registerEvents(inventoryClickListener, this);
+        pluginManager.registerEvents(pistonListener, this);
     }
 
     private void registerCommand() {
@@ -93,16 +112,23 @@ public final class LegacyBookshelves extends JavaPlugin {
         }
     }
 
-    public Long reload() {
-        long start = System.currentTimeMillis();
-        paramConfig.reload();
-        msgConfig.reload();
+    public void reload(CommandSender s) {
+        scheduler.runAsyncTask(() -> {
+            long start = System.currentTimeMillis();
+            paramConfig.reloadConfig();
+            msgConfig.reloadConfig();
+            blocksConfig.reloadConfig();
 
-        saver.reloadTask();
-        shelfManager.reloadShelves();
+            saver.reloadTask();
+            shelfManager.reloadShelves();
 
-        long end = System.currentTimeMillis();
-        return end - start;
+            long result = System.currentTimeMillis() - start;
+            scheduler.runSyncTask(() -> s.sendMessage(
+                    msgConfig.getMsgData()
+                            .reloadMsg()
+                            .replace("{time}", Long.toString(result))
+            ));
+        });
     }
 
 }

@@ -33,11 +33,9 @@ public class AutoSaver {
         taskId = scheduler.runAsyncTaskTimer(cfg.getParamData().frequencySaveDb(), () -> {
             Set<ShelfData> data = shelfManager.getData();
             if (!data.isEmpty()) {
-                scheduler.runAsyncTask(() -> {
-                    dbManager.saveShelves(
-                            data
-                    );
-                });
+                dbManager.saveShelves(
+                        data
+                );
             }
         });
     }

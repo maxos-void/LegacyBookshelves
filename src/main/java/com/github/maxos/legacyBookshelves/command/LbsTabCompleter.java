@@ -15,6 +15,8 @@ public class LbsTabCompleter implements TabCompleter {
             "reload"
     ); // не хейтите за лист из одной команды!!! это на будущее!!!
 
+    List<String> n = List.of("");
+
     @Override
     public @Nullable List<String> onTabComplete(
             @NotNull CommandSender sender,
